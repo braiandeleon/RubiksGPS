@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".notifications"
+    android:background="@drawable/fondogradiente">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Notificaciones "
+            android:textColor="#fff"
+            android:drawableRight="@drawable/ic_notifications_1"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:background="@drawable/rectangle"
+            android:layout_centerVertical="true"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/textLogo">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_weight="0.9"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/speedEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="005km/h"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:numeric="integer"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="Limite de velocidad"
+                    android:layout_margin="10dp"
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:text="Cambio de posición"
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:text="Bateria extraída"
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="Bateria baja"
+                    android:layout_margin="10dp"
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="Encendido"
+                    android:layout_margin="10dp"
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:textAlignment="center"
+                    android:text="Obten mas información en el menu de ayuda de la pantalla principal. " />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:padding="10dp"
+                android:orientation="vertical">
+
+                <ToggleButton
+                    android:id="@+id/switchsinsentido"
+                    android:layout_width="75dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:visibility="invisible"
+                    android:background="@drawable/toggle_button_background"
+                    android:textOff="@null"
+                    android:textOn="@null" />
+
+                <ToggleButton
+                    android:id="@+id/speedSwitch"
+                    android:layout_width="75dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/toggle_button_background"
+                    android:checked="false"
+                    android:textOff="@null"
+                    android:textOn="@null" />
+
+                <ToggleButton
+                    android:id="@+id/positionSwitch"
+                    android:layout_width="75dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/toggle_button_background"
+                    android:textOff="@null"
+                    android:textOn="@null" />
+
+                <ToggleButton
+                    android:id="@+id/extbatterySwitch"
+                    android:layout_width="75dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/toggle_button_background"
+                    android:textOff="@null"
+                    android:textOn="@null" />
+
+                <ToggleButton
+                    android:id="@+id/gpsbatterySwitch"
+                    android:layout_width="75dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/toggle_button_background"
+                    android:textOff="@null"
+                    android:textOn="@null" />
+
+                <ToggleButton
+                    android:id="@+id/accSwitch"
+                    android:layout_width="75dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/toggle_button_background"
+                    android:textOff="@null"
+                    android:textOn="@null" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

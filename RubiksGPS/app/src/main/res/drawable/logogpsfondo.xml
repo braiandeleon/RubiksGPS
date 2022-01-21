@@ -1,0 +1,12 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:gravity="center"
+        android:top="40dp"
+        android:bottom="40dp">
+
+        <shape android:shape="rectangle">
+            <solid android:color="#002e7a" />
+        </shape>
+    </item>
+
+</layer-list>

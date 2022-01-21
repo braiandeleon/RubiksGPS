@@ -1,0 +1,51 @@
+<resources>
+
+    <string name="EstadoSwitchArm">False</string>
+    <string name="engineStatus">estadoEngine</string>
+    <string name="mensajeubicacion">mensajeubicacion</string>
+    <string name="UltimoMensaje">UltimoMensaje</string>
+    <string name="checkStatusString">checkStatusString</string>
+    <string name="checkStatusPosition">checkStatusPosition</string>
+    <string name="checkStatusExtBattery">checkStatusExtBattery</string>
+    <string name="checkStatusGPSBattery">checkStatusGPSBattery</string>
+    <string name="checkStatusACCSwitch">checkStatusACCSwitch</string>
+    <string name="ParkingSpotLocationWasAsked">ParkingSpotLocationWasAsked</string>
+    <string name="AskParkLocationString">AskParkLocationString</string>
+    <string name="SOSPedido">SOSPedido</string>
+    <string name="BatteryPercentage">0%</string>
+    <string name="GSMPercentage">0</string>
+    <string name="SOSmessageStatus">SOSmessageStatus</string>
+    <string name="POWER">OFF</string>
+
+    <!--VARIABLES INICIO DE SESION GPS WOX-->
+    <string name="NEW_GPSWOXCONFIG">blank</string>
+    <string name="GPSWOX_USERNAME">username</string>
+    <string name="GPSWOX_PASSWORD">password</string>
+
+    <!--AQUI DEBAJO ESTAN LAS VARIABLES DE NUMEROS DE TELEFONO-->
+    <string name="SMS_GPSDEVICENUMBER">6566605292</string>
+    <string name="GPS_DEVICE_NUMBER">tag</string>
+    <string name="OWNERS_PHONE_NUMBER">6566605292</string>
+    <string name="SOS_ALERT_BODY">SOS_ALERT_BODY</string>
+    <string name="SOS_ALERT_NUMBER">SOS_ALERT_NUMBER</string>
+
+    <!--VARIABLES INFORMACION USUARIO-->
+    <string name="userInfoBody">userInfoBody</string>
+    <string name="userDisplay">userDisplay</string>
+    <string name="vehicleDisplay">VehicleDisplay</string>
+    <string name="emailDisplay">EmailDisplay</string>
+
+    <string name="app_name">Eagle GPS</string>
+    <string name="intro_message">Bienvenido a la App checadora de puntos de venta. Con el fin de corroborar que usted estuvo presente en la ubicacion del negocio del cliente simplemente acerquese a la etiqueta y coloque el dispositivo cerca de ella. \n \n Espere el mensaje y habra terminado. </string>
+    <string name="error">Error</string>
+    <string name="no_nfc">No NFC found on this device</string>
+
+    <string name="nfc_disabled">NFC is not enable. Please go to the wireless settings to enable it. </string>
+    <string name="menu_main_clear_title">Clear all</string>
+    <string name="menu_main_copy">Copy IDs</string>
+    <string name="menu_copy_hex">Hex</string>
+    <string name="menu_copy_reversed_hex">Reversed hex</string>
+    <string name="menu_copy_dec">Dec</string>
+    <string name="menu_copy_reversed_dec">Reversed dec</string>
+    <string name="nothing_scanned">Nothing scanned yet</string>
+</resources>

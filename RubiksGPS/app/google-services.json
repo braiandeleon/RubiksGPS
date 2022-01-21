@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "979575401967",
+    "firebase_url": "https://rubiksgps.firebaseio.com",
+    "project_id": "rubiksgps",
+    "storage_bucket": "rubiksgps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979575401967:android:f74ba3acca60e12a",
+        "android_client_info": {
+          "package_name": "com.example.rubiksgps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "979575401967-ajlfa0es7el29650u3jp2aatgi8485gp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rubiksgps",
+            "certificate_hash": "5357fef7d1097caf26ebe91891957e38eec621ea"
+          }
+        },
+        {
+          "client_id": "979575401967-po42rlfqhnq7rn04p6sclkba4snffsos.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTBqQx98fd6xFqdChQxtSfbPK3Wjat9V8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "979575401967-po42rlfqhnq7rn04p6sclkba4snffsos.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

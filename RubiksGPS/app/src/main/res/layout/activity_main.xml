@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondogradiente"
+    android:orientation="vertical"
+    android:id="@+id/motherlayout"
+    android:padding="0dp"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    tools:context="com.example.rubiksgps.MainActivity">
+
+<!--
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@drawable/fondoanimado"
+        android:id="@+id/motherlayout1">
+
+    </LinearLayout>
+-->
+
+
+<!--    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/statuslayoutLogos"
+        app:srcCompat="@drawable/logo" />-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/ultimaActLayout"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@id/buttonslayout"
+        app:layout_constraintTop_toBottomOf="@id/perfilLayout">
+
+        <TextView
+            android:id="@+id/textUltimaActualizacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:textAlignment="center"
+            android:text="Ultima actualización" />
+
+        <TextView
+            android:id="@+id/textNumeroUltimaActualizacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Getting..."
+            android:textAlignment="center"
+            android:textColor="#fff" />
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative_armlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/favicon"
+        app:layout_constraintBottom_toTopOf="@+id/perfilLayout">
+
+
+        <ToggleButton
+            android:id="@+id/botonqueseguarda"
+            android:background="@drawable/shield_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="@null"
+            android:textOn="@null"/>
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sos"
+            android:id="@+id/sosButton"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:textOff="S.O.S."
+            android:textOn="S.O.S."
+            android:layout_centerInParent="true" />
+
+
+        <ToggleButton
+            android:id="@+id/enginebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/engine_off"
+            android:textOff="@null"
+            android:textOn="@null"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/perfilLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="4dp"
+        android:background="@drawable/rectangle"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/ultimaActLayout"
+        app:layout_constraintTop_toBottomOf="@id/relative_armlayout"
+        app:layout_constraintVertical_bias="0"
+        tools:layout_editor_absoluteX="0dp">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_boy" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/userDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Propietario: Braian de Leon"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/vehicleDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Vehiculo: Nissan Altima 2011"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/emailDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Correo: braiandeleon@gmail.com"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/mensaje"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Obtener ubicación"
+                android:visibility="gone"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/cadena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right|bottom"
+                android:orientation="vertical">
+
+
+                <ImageButton
+                    android:id="@+id/imageButtonRefresh"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/circle"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_sync" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/statuslayoutText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#009dff"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="0dp"
+        android:id="@+id/favicon"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/statuslayoutLogos"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/textodelLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="EagleGPS"
+                android:textColor="#fff"
+                android:textSize="45dp"
+                android:textStyle="italic" />
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:background="@drawable/ic_satellite2" />
+        </LinearLayout>
+
+
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintBottom_toTopOf="@id/statuslayoutLogos"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <TextView
+            android:id="@+id/batteryTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="100%"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/signalTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="100%"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/powerTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="OFF"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/GasPorcentageText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="0km/h"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/statuslayoutLogos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/statuslayoutLogos"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <ImageView
+                android:id="@+id/porcentajeBat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_battery"
+                android:textColor="#d67601" />
+
+            <ImageView
+                android:id="@+id/signalPorcentaje"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_signal"
+                android:textColor="#d67601" />
+
+            <ImageView
+                android:id="@+id/carIsOnOff"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_directions_car_1"
+                android:textColor="#d67601" />
+
+            <ImageView
+                android:id="@+id/ic_speed"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_speed" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonslayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/motherlayout">
+
+
+        <ImageButton
+            android:id="@+id/button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:background="#00BFFF"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_gps_1"
+            />
+
+        <ImageButton
+            android:id="@+id/imageButtonGPS"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="#00BFFF"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logout" />
+
+
+        <ImageButton
+            android:id="@+id/imageButton10"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="#00BFFF"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_directions_car_1" />
+
+        <ImageButton
+            android:id="@+id/pagoButton"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="#00BFFF"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_attach_money_1" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="#00BFFF"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/ic_media_play" />
+
+        <ImageButton
+            android:id="@+id/btnStop"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="#00BFFF"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_volume_off_1" />
+
+        <ImageButton
+            android:id="@+id/buttonNotifications"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="#00BFFF"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_notifications_1" />
+
+
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

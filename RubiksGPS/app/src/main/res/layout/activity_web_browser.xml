@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="01dp"
+    tools:context="com.example.rubiksgps.web_browser">
+
+    <Button
+
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="EagleGPS"
+        android:textSize="30dp"
+        android:textStyle="italic"
+        android:textColor="#fff"
+        android:fontFamily="sans-serif-black"
+        android:textAllCaps="false"
+        android:textAlignment="center"
+        android:background="@drawable/fondogradiente"
+
+        />
+
+    <WebView
+        android:id="@+id/webview"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
+        android:importantForAutofill="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="o">
+
+    </WebView>
+
+
+
+
+</android.support.constraint.ConstraintLayout>
