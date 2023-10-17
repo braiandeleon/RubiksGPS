@@ -16,7 +16,6 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -36,7 +35,7 @@ public class Background_Service extends Service {
     private MediaPlayer vstarted;
     private MediaPlayer vstopped;
 
-    private final String Admin = "6566605292";
+    private final String Admin = "5639082350";
     private SharedPreferences mPreferences;
     private SharedPreferences.Editor mEditor;
 
@@ -50,6 +49,7 @@ public class Background_Service extends Service {
 
 
         private void processReceive(Context context, Intent intent) {
+            Toast.makeText(context, "DDDD", Toast.LENGTH_SHORT).show();
             Bundle extras = intent.getExtras();
             String message = "";
             String body = "";
@@ -166,7 +166,7 @@ public class Background_Service extends Service {
                         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                         assert am != null;
                         am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-                        MainActivity.not.start();
+                        MainActivity.notifications_player.start();
                         //El mensaje debe contener o empezar con sensor alarm!
                         if (body.contains("alarm!")) {
                             player.setLooping(true);
@@ -231,50 +231,6 @@ public class Background_Service extends Service {
                                 mEditor.commit();
                             }
 
-
-                        }
-                        if (body.equals("Tracker is activated")) {
-/*                        MainActivity cls = new MainActivity();
-                        if(cls.setValorb1(true)){
-                            cls.loadData();
-                            cls.setValorb1(false);
-                            cls.saveData();*/
-                            mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                            mEditor = mPreferences.edit();
-                            mEditor.putString(context.getString(R.string.EstadoSwitchArm), "True");
-                            mEditor.commit();
-                            Toast.makeText(context, "Sistema en linea.", Toast.LENGTH_SHORT).show();
-
-
-                        }
-                        if (body.equals("Tracker is deactivated")) {
-/*                        MainActivity cls = new MainActivity();
-                        if(cls.setValorb1(true)){
-                            cls.loadData();
-                            cls.setValorb1(false);
-                            cls.saveData();*/
-                            mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                            mEditor = mPreferences.edit();
-                            mEditor.putString(context.getString(R.string.EstadoSwitchArm), "False");
-                            mEditor.commit();
-                            Toast.makeText(context, "Sistema desactivado.", Toast.LENGTH_SHORT).show();
-
-
-                        }
-                        if (body.equals("Resume engine Succeed")) {
-                            mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                            mEditor = mPreferences.edit();
-                            mEditor.putString(context.getString(R.string.engineStatus), "True");
-                            mEditor.commit();
-                            Toast.makeText(context, "El motor ha sido activado.", Toast.LENGTH_SHORT).show();
-
-                        }
-                        if (body.equals("Stop engine Succeed")) {
-                            mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                            mEditor = mPreferences.edit();
-                            mEditor.putString(context.getString(R.string.engineStatus), "False");
-                            mEditor.commit();
-                            Toast.makeText(context, "El motor ha sido desactivado.", Toast.LENGTH_SHORT).show();
 
                         }
                             //El mensaje debe contener o empezar con sensor alarm!

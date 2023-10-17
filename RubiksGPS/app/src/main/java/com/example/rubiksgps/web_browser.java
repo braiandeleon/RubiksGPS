@@ -99,19 +99,12 @@ public class web_browser extends AppCompatActivity {
         });
 
         browser.setWebViewClient(new MyWebViewClient() {
-
-
-
-
-
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             //Al cargar la pagina...
             public void onPageFinished(WebView view, String url){
                 //String javaScript ="javascript:(function() {alert();})()";
                 //browser.loadUrl(javaScript);
                 String DireccionActual = browser.getUrl();
-
-
 
 
                 if(browser.getUrl().equals("https://www.gpswox.com/en/sign-in")){
@@ -259,7 +252,7 @@ public class web_browser extends AppCompatActivity {
     }
 
     public class MyWebViewClient extends WebViewClient {
-        List<String> whiteHosts = Arrays.asList("http://europe.gpswox.com/objects",  "https://www.gpswox.com/en/sign-in", "google.com");
+        List<String> whiteHosts = Arrays.asList("http://europe.gpswox.com/objects",  "https://www.gpswox.com/en/sign-in");
 
         @Override
         public boolean shouldOverrideUrlLoading

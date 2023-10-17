@@ -1,7 +1,6 @@
 <resources>
-
-    <string name="EstadoSwitchArm">False</string>
-    <string name="engineStatus">estadoEngine</string>
+    <string name="arm_state_string">False</string>
+    <string name="engine_state_string">braian</string>
     <string name="mensajeubicacion">mensajeubicacion</string>
     <string name="UltimoMensaje">UltimoMensaje</string>
     <string name="checkStatusString">checkStatusString</string>
@@ -23,9 +22,9 @@
     <string name="GPSWOX_PASSWORD">password</string>
 
     <!--AQUI DEBAJO ESTAN LAS VARIABLES DE NUMEROS DE TELEFONO-->
-    <string name="SMS_GPSDEVICENUMBER">6566605292</string>
+    <string name="SMS_GPSDEVICENUMBER">6561129196</string>
     <string name="GPS_DEVICE_NUMBER">tag</string>
-    <string name="OWNERS_PHONE_NUMBER">6566605292</string>
+    <string name="OWNERS_PHONE_NUMBER">5639082350</string>
     <string name="SOS_ALERT_BODY">SOS_ALERT_BODY</string>
     <string name="SOS_ALERT_NUMBER">SOS_ALERT_NUMBER</string>
 

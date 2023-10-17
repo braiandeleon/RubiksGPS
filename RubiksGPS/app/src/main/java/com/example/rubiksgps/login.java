@@ -43,7 +43,6 @@ public class login extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        findViewById(R.id.textViewSignup).setOnClickListener(this);
         findViewById(R.id.buttonlogin).setOnClickListener(this);
         editTexEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
@@ -107,10 +106,6 @@ public class login extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch(view.getId()){
-            case R.id.textViewSignup:
-                finish();
-                startActivity(new Intent(this, pagos.class));
-                break;
 
             case R.id.buttonlogin:
                 userLogin();

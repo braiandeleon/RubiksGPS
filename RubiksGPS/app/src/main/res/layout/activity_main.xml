@@ -2,16 +2,16 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motherlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondogradiente"
     android:orientation="vertical"
-    android:id="@+id/motherlayout"
     android:padding="0dp"
     android:scrollbarAlwaysDrawVerticalTrack="true"
     tools:context="com.example.rubiksgps.MainActivity">
 
-<!--
+    <!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +23,7 @@
 -->
 
 
-<!--    <ImageView
+    <!--    <ImageView
         android:id="@+id/imageView5"
         android:layout_width="match_parent"
         android:layout_height="180dp"
@@ -38,232 +38,24 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/icons_text_layout"
+        android:layout_width="0dp"
+
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/ultimaActLayout"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toTopOf="@id/buttonslayout"
-        app:layout_constraintTop_toBottomOf="@id/perfilLayout">
-
-        <TextView
-            android:id="@+id/textUltimaActualizacion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:textAlignment="center"
-            android:text="Ultima actualización" />
-
-        <TextView
-            android:id="@+id/textNumeroUltimaActualizacion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Getting..."
-            android:textAlignment="center"
-            android:textColor="#fff" />
-
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/relative_armlayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="horizontal"
+        android:weightSum="4"
+        app:layout_constraintBottom_toTopOf="@+id/icons_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/favicon"
-        app:layout_constraintBottom_toTopOf="@+id/perfilLayout">
-
-
-        <ToggleButton
-            android:id="@+id/botonqueseguarda"
-            android:background="@drawable/shield_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textOff="@null"
-            android:textOn="@null"/>
-
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sos"
-            android:id="@+id/sosButton"
-            android:textSize="24dp"
-            android:textStyle="bold"
-            android:textOff="S.O.S."
-            android:textOn="S.O.S."
-            android:layout_centerInParent="true" />
-
-
-        <ToggleButton
-            android:id="@+id/enginebutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/engine_off"
-            android:textOff="@null"
-            android:textOn="@null"/>
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/perfilLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="4dp"
-        android:background="@drawable/rectangle"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/ultimaActLayout"
-        app:layout_constraintTop_toBottomOf="@id/relative_armlayout"
-        app:layout_constraintVertical_bias="0"
-        tools:layout_editor_absoluteX="0dp">
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_boy" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/userDisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Propietario: Braian de Leon"
-                android:textColor="#000000" />
-
-            <TextView
-                android:id="@+id/vehicleDisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Vehiculo: Nissan Altima 2011"
-                android:textColor="#000000" />
-
-            <TextView
-                android:id="@+id/emailDisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Correo: braiandeleon@gmail.com"
-                android:textColor="#000000" />
-
-            <TextView
-                android:id="@+id/mensaje"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Obtener ubicación"
-                android:visibility="gone"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/cadena"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="right|bottom"
-                android:orientation="vertical">
-
-
-                <ImageButton
-                    android:id="@+id/imageButtonRefresh"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_margin="15dp"
-                    android:background="@drawable/circle"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/ic_sync" />
-
-
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/statuslayoutText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#009dff"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:padding="0dp"
-        android:id="@+id/favicon"
-        android:gravity="center_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/statuslayoutLogos"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <TextView
-                android:id="@+id/textodelLogo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="sans-serif-black"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="EagleGPS"
-                android:textColor="#fff"
-                android:textSize="45dp"
-                android:textStyle="italic" />
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:scaleType="fitCenter"
-                android:background="@drawable/ic_satellite2" />
-        </LinearLayout>
-
-
-
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-
-        app:layout_constraintBottom_toTopOf="@id/statuslayoutLogos"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:weightSum="4">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/batteryTextView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="100%"
+            android:text="X%"
             android:textAlignment="center"
             android:textColor="#fff"
             android:textStyle="bold" />
@@ -273,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="100%"
+            android:text="X%"
             android:textAlignment="center"
             android:textColor="#fff"
             android:textStyle="bold" />
@@ -283,17 +75,17 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="OFF"
+            android:text="X"
             android:textAlignment="center"
             android:textColor="#fff"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/GasPorcentageText"
+            android:id="@+id/gas_level_text"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="0km/h"
+            android:text="X%"
             android:textAlignment="center"
             android:textColor="#fff"
             android:textStyle="bold" />
@@ -301,13 +93,15 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/statuslayoutLogos"
-        android:layout_width="match_parent"
+        android:id="@+id/icons_layout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/statuslayoutLogos"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintBottom_toTopOf="@id/center_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icons_text_layout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -352,83 +146,222 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/buttonslayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/center_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:gravity="center_horizontal"
-        app:layout_constraintBottom_toBottomOf="@id/motherlayout">
+        app:layout_constraintBottom_toTopOf="@id/buttons_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icons_layout">
 
-
-        <ImageButton
-            android:id="@+id/button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="5dp"
-            android:background="#00BFFF"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_gps_1"
-            />
-
-        <ImageButton
-            android:id="@+id/imageButtonGPS"
-            android:layout_width="50dp"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#00BFFF"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/logout" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/doors_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed">
+
+                <WebView
+                    android:id="@+id/webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_marginBottom="7dp"
+                    android:visibility="gone">
+
+                </WebView>
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/transparent_rectangle"
+                    android:visibility="visible" />
+
+                <Button
+                    android:id="@+id/loading_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:drawable/screen_background_dark"
+                    android:text="Loading..."
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/cardview_light_background" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/doors_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:gravity="center_horizontal"
+                android:text="Doors:  null"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toTopOf="@+id/scheduled_activation_text"
+                app:layout_constraintEnd_toEndOf="@+id/frameLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+
+            <TextView
+                android:id="@+id/scheduled_activation_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Scheduled Activation (On->Off): 23:59->8:00"
+                android:textColor="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/doors_text" />
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/center_layout">
 
         <ImageButton
-            android:id="@+id/imageButton10"
-            android:layout_width="50dp"
+            android:id="@+id/silence_button"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:background="#00BFFF"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_directions_car_1" />
-
-        <ImageButton
-            android:id="@+id/pagoButton"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:background="#00BFFF"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_attach_money_1" />
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:background="#00BFFF"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            android:src="@android:drawable/ic_media_play" />
-
-        <ImageButton
-            android:id="@+id/btnStop"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:background="#00BFFF"
+            android:background="@drawable/circle"
             android:padding="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_volume_off_1" />
 
+        <ToggleButton
+            android:id="@+id/enginebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="#002e7a"
+            android:checked="true"
+            android:textColor="#ffffff"
+            android:textOff="OFF A1"
+            android:textOn="ON A1" />
+
+        <Button
+            android:id="@+id/ButtonRefresh"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="@drawable/ic_sync"
+            android:backgroundTint="#002e7a"
+            android:textColor="#ffffff" />
+
+        <ToggleButton
+            android:id="@+id/botonqueseguarda"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="#002e7a"
+            android:textColor="#ffffff"
+            android:textOff="DISARMED"
+            android:textOn="ARMED" />
+
         <ImageButton
             android:id="@+id/buttonNotifications"
-            android:layout_width="50dp"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:background="#00BFFF"
+            android:background="@drawable/circle"
             android:padding="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_notifications_1" />
 
-
     </LinearLayout>
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:layout_marginTop="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttons_layout">
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableLayout>
+
+        <ImageButton
+            android:id="@+id/logout_button"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:background="#00FFFFFF"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logout"
+            app:layout_constraintEnd_toEndOf="@+id/tableLayout" />
+
+        <LinearLayout
+            android:id="@+id/last_update_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textUltimaActualizacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Last update"
+                android:textAlignment="center"
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/textNumeroUltimaActualizacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Press &quot;Update&quot; button to fetch..."
+                android:textAlignment="center"
+                android:textColor="#fff" />
+
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/start_service_button"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:background="#00FFFFFF"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/ic_media_play"
+            app:layout_constraintStart_toStartOf="@+id/tableLayout" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
 </android.support.constraint.ConstraintLayout>

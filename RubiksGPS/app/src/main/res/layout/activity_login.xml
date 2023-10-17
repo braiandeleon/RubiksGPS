@@ -130,15 +130,6 @@
                     android:textColor="#fff"
                     android:textSize="18sp"/>
 
-                <TextView
-                    android:id="@+id/textViewSignup"
-                    android:layout_gravity="center_horizontal"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textAlignment="center"
-                    android:text="Renovar suscripción"
-                    android:textColor="#000"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
 

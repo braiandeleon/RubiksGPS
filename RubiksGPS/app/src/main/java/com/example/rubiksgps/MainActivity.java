@@ -1,350 +1,320 @@
-package com.example.rubiksgps;
+// Scheduled Activation Time. Calculate value based on Thread and CurrentDate
+// Background Service should be running in notifications
+// Block any other website to open once in objects screen in browser
+// NFC feature to arm/disarm device
 
+package com.example.rubiksgps;
+import java.time.LocalDateTime;
 import android.Manifest;
-import android.app.ActivityManager;
-import android.app.PendingIntent;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.view.Display;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import com.example.rubiksgps.record.TextRecord;
+import java.util.HashMap;
+import java.util.Objects;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import android.webkit.WebViewClient;
 
 public class MainActivity extends AppCompatActivity {
-    private SharedPreferences mPreferences;
-    private SharedPreferences.Editor mEditor;
-    EditText txt_message;
-    ImageButton button;
-    public TextView userDisplay;
-    public TextView vehicleDisplay;
-    public TextView emailDisplay;
-    private ToggleButton botonqueseguarda;
-    private ToggleButton sosButton;
-    private ImageButton imageButtonRefresh;
-    private ImageButton imageButton2;
-    private ToggleButton enginebutton;
-    public TextView mensaje;
-    public TextView cadena;
-    public TextView batteryTextView,signalTextView, powerTextView;
-    ImageButton imageButtonGPS;
-    public static MediaPlayer mp;
-    public  static  MediaPlayer not;
-    public int count = 0;
-    public static MainActivity activityA;
-    private int ALL_PERMISSIONS = 1;
+    public SharedPreferences mPreferences;
+    private final int ALL_PERMISSIONS = 1;
     final String[] permissions = new String[]{Manifest.permission.SEND_SMS, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.VIBRATE};
+    private WebView browser;
+    private ToggleButton set_engine_button, set_arm_button;
+    private TextView batteryTextView, signalTextView, powerTextView, doorsTextView, gas_levelTextView, last_update_label;
+    private Button loading_button, check_info_button;
+    public static MediaPlayer siren_player,notifications_player;
 
+    private final BroadcastReceiver smsReceivedReceiver = new BroadcastReceiver() {
+        @SuppressLint("SetTextI18n")
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String gps_id = "6561129196";
+            String admin = "+525639082350";
+            Log.d("Tag", admin);
+            String sms_body = intent.getStringExtra("body");
+            String sms_address = intent.getStringExtra("address");
+            // Check for previous settings
+            SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor mEditor = mPreferences.edit();
+            //GPS Device Messages
+            assert sms_address != null;
+            if (sms_address.equals(gps_id)){
+                notifications_player.start();
+                LocalDateTime currentDateTime = LocalDateTime.now();
+                last_update_label.setText(currentDateTime.toString());
+                assert sms_body != null;
+                if (sms_body.contains("GPRS")){
+                    // Split the input string into lines
+                    String[] sms_body_in_lines = sms_body.split("\n");
+                    // Create a HashMap to store the key-value pairs
+                    HashMap<String, String> sms_body_dictionary = new HashMap<>();
+                    // Process each line to extract key-value pairs
+                    for (String line : sms_body_in_lines) {
+                        String[] parts = line.split(": ");
+                        if (parts.length == 2) {
+                            String key = parts[0];
+                            String value = parts[1];
+                            sms_body_dictionary.put(key, value);
+                        }
+                    }
+                    //Update Top Fields Values
+                    int signal_value = Integer.parseInt(Objects.requireNonNull(sms_body_dictionary.get("GSM")));
+                    int signal_value_percent = ((signal_value)*100)/32;
+                    signalTextView.setText(signal_value_percent+"%");
+                    batteryTextView.setText(sms_body_dictionary.get("Bat"));
+                    powerTextView.setText(sms_body_dictionary.get("ACC"));
+                    gas_levelTextView.setText(sms_body_dictionary.get("Oil"));
+                    String doors_text = sms_body_dictionary.get("Door");
+                    assert doors_text != null;
+                    if (doors_text.equals("ON")){
+                        doorsTextView.setText("Doors: Open");
+                    } else if (doors_text.equals("OFF")) {
+                        doorsTextView.setText("Doors: Closed");
+                    }
+                }
+                if (sms_body.contains("Stop engine Succeed")){
+                    set_engine_button.setChecked(false);
+                    mEditor.putString(getString(R.string.engine_state_string),"False");
+                    mEditor.apply();
 
-
+                } else if (sms_body.contains("Resume engine Succeed")) {
+                    set_engine_button.setChecked(true);
+                    mEditor.putString(getString(R.string.engine_state_string),"True");
+                    mEditor.apply();
+                }
+                if (sms_body.contains("Tracker is activated")){
+                    set_arm_button.setChecked(true);
+                    mEditor.putString(getString(R.string.arm_state_string),"True");
+                    mEditor.apply();
+                } else if (sms_body.contains("Tracker is deactivated")) {
+                    set_arm_button.setChecked(false);
+                    mEditor.putString(getString(R.string.arm_state_string),"False");
+                    mEditor.apply();
+                }
+                if (sms_body.contains("alarm!")) {
+                    siren_player.setLooping(true);
+                    siren_player.start();
+                    vibrate_alarm();
+                }
+            }
+            //Admin Device Messages
+        }
+    };
     @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override //Decorator Override makes function to execute first
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==ALL_PERMISSIONS){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Log.d("Tag", "Empty if");
+            }else {Toast.makeText(this, "Please grant permissions!", Toast.LENGTH_SHORT).show();}
+        }
+    }
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter("custom.action.SMS_RECEIVED");
+        registerReceiver(smsReceivedReceiver, intentFilter);
+        loading_button.setVisibility(View.VISIBLE);
+        browser.setWebViewClient(new MyWebViewClient(){
+            public void onPageFinished(WebView view, String url){
+                if(browser.getUrl().equals("https://www.gpswox.com/en/sign-in")){
+                    //Automatic login
+                    super.onPageFinished(view, url);
+                    final String username = "braiandeleon+03@gmail.com";
+                    final String password = "GHPbw5";
+                    final String server = "eu";
+                    Log.d("Tag", server);
+                    final String xs = "javascript:" +
+                            "document.getElementById('sign-in-form-password').value = '" + password + "';"  +
+                            "document.getElementById('sign-in-form-email').value = '" + username + "';";
+                    String js = "javascript:(function(){"+
+                            "l=document.getElementsByClassName('sign-in-form-submit button button-color-green is-float-right')[0];"+
+                            "l.click();"+
+                            "})()";
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        browser.evaluateJavascript(xs, s -> {});
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        browser.evaluateJavascript(js, s -> {});
+                    }
+                }
+                if(browser.getUrl().contains("objects")){
+                    super.onPageFinished(view, url);
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        loading_button.setVisibility(View.GONE);
+                        browser.setVisibility(View.VISIBLE);
+                    }, 2000);
+                }
+            }
+        });
+        WebSettings webSettings = browser.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        browser.loadUrl("https://www.gpswox.com/en/sign-in");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        unregisterReceiver(smsReceivedReceiver);
+    }
+    @SuppressLint("SetJavaScriptEnabled")
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActivityCompat.requestPermissions(this, permissions, ALL_PERMISSIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        activityA = this;
-        Boolean newString;
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            newString = extras.getBoolean("EXIT");
-            if (newString=true) {
-                newString = false;
-                Toast.makeText(this, "Suscripción finalizada", Toast.LENGTH_SHORT).show();
-                finish();
-            }}
-
-        userDisplay = (TextView) findViewById(R.id.userDisplay);
-        vehicleDisplay= (TextView) findViewById(R.id.vehicleDisplay);
-        emailDisplay = (TextView) findViewById(R.id.emailDisplay);
-
-
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mEditor = mPreferences.edit();
-        String stringUserDisplay = mPreferences.getString(getString(R.string.userDisplay), "");
-        String stringVehicleDisplay = mPreferences.getString(getString(R.string.vehicleDisplay), "");
-        String stringEmailDisplay = mPreferences.getString(getString(R.string.emailDisplay), "");
-        userDisplay.setText(stringUserDisplay);
-        vehicleDisplay.setText(stringVehicleDisplay);
-        emailDisplay.setText(stringEmailDisplay);
-//Codigo redundante
-        imageButtonGPS = (ImageButton) findViewById(R.id.imageButtonGPS);
-        imageButtonRefresh = (ImageButton) findViewById(R.id.imageButtonRefresh);
-        imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
-        batteryTextView = (TextView) findViewById(R.id.batteryTextView);
-        signalTextView = (TextView) findViewById(R.id.signalTextView);
-        powerTextView = (TextView) findViewById(R.id.powerTextView);
-        mensaje = (TextView) findViewById(R.id.mensaje);
-
-        mensaje.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ubicacion();
-            }
-        });
-        cadena = (TextView) findViewById(R.id.cadena);
-        sosButton = (ToggleButton) findViewById(R.id.sosButton);
-        enginebutton = (ToggleButton) findViewById(R.id.enginebutton);
-        final TextView textodelLogo =  (TextView) findViewById(R.id.textodelLogo);
-        final TextView NumeroActuaizacion = findViewById(R.id.textNumeroUltimaActualizacion);
-        ImageButton btnStop = findViewById(R.id.btnStop);////boton que detiene el sonido de alarma
-        ImageButton pagoButton = findViewById(R.id.pagoButton);
-        ImageButton parkingbutton = findViewById(R.id.imageButton10);
-        button = (ImageButton)   findViewById(R.id.button);
-        ImageButton imageButtonNotifications = findViewById(R.id.buttonNotifications);
-        ConstraintLayout your_Layout = (ConstraintLayout) findViewById(R.id.motherlayout);
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mEditor = mPreferences.edit();
-        botonqueseguarda = (ToggleButton)   findViewById(R.id.botonqueseguarda);
-        checkSharedPreferences();
-        imageButtonRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { checkMessage(); }
-        });
-        imageButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                ToastServicio();
-
-
-
-
-
-
-              //--------------------------------------------------------------------------------------------->
-
-            }
-        });
-        enginebutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(enginebutton.isChecked()){
-                    mEditor.putString(getString(R.string.engineStatus), "False");
-                    mEditor.commit();
-                }else{
-                    mEditor.putString(getString(R.string.engineStatus), "True");
-                    mEditor.commit();
+        //Context and not visible components initialization
+        siren_player = MediaPlayer.create(MainActivity.this, R.raw.siren);
+        notifications_player = MediaPlayer.create(this, R.raw.not);
+        //Component initialization
+        ImageButton silence_button = findViewById(R.id.silence_button);//Private Components. Accessible by other than onCreate (parent) function
+        ImageButton notifications_button = findViewById(R.id.buttonNotifications);
+        ImageButton logout_button = findViewById(R.id.logout_button);
+        ImageButton start_service = findViewById(R.id.start_service_button);
+        browser = (WebView) findViewById(R.id.webView);//Public Components
+        check_info_button = findViewById(R.id.ButtonRefresh);
+        loading_button = findViewById(R.id.loading_button);
+        last_update_label = findViewById(R.id.textNumeroUltimaActualizacion);
+        set_engine_button = findViewById(R.id.enginebutton);
+        set_arm_button = findViewById(R.id.botonqueseguarda);
+        batteryTextView = findViewById(R.id.batteryTextView);
+        signalTextView = findViewById(R.id.signalTextView);
+        powerTextView = findViewById(R.id.powerTextView);
+        doorsTextView = findViewById(R.id.doors_text);
+        gas_levelTextView = findViewById(R.id.gas_level_text);
+        // Check for previous settings
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String stored_arm_state = mPreferences.getString(getString(R.string.arm_state_string), "null");
+        String stored_engine_state = mPreferences.getString(getString(R.string.engine_state_string), "null");
+//        .Toast.makeText(getApplicationContext(), stored_arm_state, Toast.LENGTH_SHORT).show();
+//        .Toast.makeText(getApplicationContext(), stored_engine_state, Toast.LENGTH_SHORT).show();
+        set_arm_button.setChecked(Boolean.parseBoolean(stored_arm_state));
+        set_engine_button.setChecked(Boolean.parseBoolean(stored_engine_state));
+        //Browser Initialization
+        browser.setWebViewClient(new MyWebViewClient(){
+            public void onPageFinished(WebView view, String url){
+                if(browser.getUrl().equals("https://www.gpswox.com/en/sign-in")){
+                    //Automatic login
+                    super.onPageFinished(view, url);
+                    final String username = "braiandeleon+03@gmail.com";
+                    final String password = "GHPbw5";
+                    final String server = "eu";
+                    Log.d("Tag", server);
+                    final String xs = "javascript:" +
+                            "document.getElementById('sign-in-form-password').value = '" + password + "';"  +
+                            "document.getElementById('sign-in-form-email').value = '" + username + "';";
+                    String js = "javascript:(function(){"+
+                            "l=document.getElementsByClassName('sign-in-form-submit button button-color-green is-float-right')[0];"+
+                            "l.click();"+
+                            "})()";
+                    browser.evaluateJavascript(xs, s -> {});
+                    browser.evaluateJavascript(js, s -> {});
                 }
-                engine_state();
-            }
-        });
-
-        botonqueseguarda.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(botonqueseguarda.isChecked()){
-                    mEditor.putString(getString(R.string.EstadoSwitchArm), "False");
-                    mEditor.commit();
-                }else{
-                    mEditor.putString(getString(R.string.EstadoSwitchArm), "True");
-                    mEditor.commit();
-                }
-                arm_state();
-            }
-        });
-        imageButtonNotifications.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { openNotifications();
-            }
-        });
-        pagoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openPagos();
-            }
-        });
-        parkingbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { ubicacion(); logoutCommand();}
-        });
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                mp.stop();
-                silentmodebuttonclick();
-                mp = MediaPlayer.create(MainActivity.this, R.raw.siren);
-                mp.setLooping(true);
-
-
-            }
-        });
-        mp = MediaPlayer.create(MainActivity.this, R.raw.siren);
-        not = MediaPlayer.create(this, R.raw.not);
-        //BOTON QUE ABRE LA VENTANA DE GPSWOX
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openWebBrowser();
-            }
-        });
-        sosButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sosCommand();
-            }
-        });
-        imageButtonGPS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logoutMethod();
-            }
-        });
-
-
-        Thread t=new Thread(){
-            @Override
-            public void run(){
-                while(!interrupted()){
-                    try {
-                        Thread.sleep(1000);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                count++;
-
-                                String segundos = String.valueOf(count);
-                                NumeroActuaizacion.setText("hace "+segundos+" segundos");
-                                String NuevoValor = mPreferences.getString(getString(R.string.EstadoSwitchArm), "False");
-                                String EngineStatus = mPreferences.getString(getString(R.string.engineStatus), "True");
-
-                                if(NuevoValor.equals("False")){
-                                    botonqueseguarda.setBackgroundResource(R.drawable.shield_off);
-                                    botonqueseguarda.setChecked(false);}
-
-
-                                if(NuevoValor.equals("True")){
-                                    botonqueseguarda.setBackgroundResource(R.drawable.shield_on);
-                                    botonqueseguarda.setChecked(true); }
-
-
-                                if(EngineStatus.equals("True")){
-                                    enginebutton.setBackgroundResource(R.drawable.engine_on);
-                                    enginebutton.setChecked(true); }
-
-
-                                if (EngineStatus.equals("False")){
-                                    enginebutton.setBackgroundResource(R.drawable.engine_off);
-                                    enginebutton.setChecked(false);}
-
-
-                                if(mp.isPlaying()){
-                                    vibrate_alarm();}
-
-                                String SOSValor = mPreferences.getString(getString(R.string.SOSmessageStatus), "False");
-                                String SOSPedido = mPreferences.getString(getString(R.string.SOSPedido), "False");
-                                if(SOSPedido.equals("True")){
-                                    if(SOSValor.equals("True")){
-                                        MensajeAuxilio();
-                                        mEditor.putString(getString(R.string.SOSPedido), "False");
-                                        mEditor.commit();
-                                        mEditor.putString(getString(R.string.SOSmessageStatus), "False");
-                                        mEditor.commit();
-                                    }
-                                }
-                                String ParkLocationWasAsked = mPreferences.getString(getString(R.string.ParkingSpotLocationWasAsked), "False");
-                                String AskParkLocation = mPreferences.getString(getString(R.string.AskParkLocationString), "False");
-                                if(ParkLocationWasAsked.equals("True")){
-                                    if(AskParkLocation.equals("True")){
-                                        openMaps();
-                                        mEditor.putString(getString(R.string.ParkingSpotLocationWasAsked), "False");
-                                        mEditor.commit();
-                                        mEditor.putString(getString(R.string.AskParkLocationString), "False");
-                                        mEditor.commit();
-                                    }
-                                }
-
-                                String power = mPreferences.getString(getString(R.string.POWER), "");
-                                if(power!=null&&!power.isEmpty()){
-                                    String separado[] = power.split("\n");
-                                    String BatteryCiento = separado[1];
-                                    String Encendido = separado[4];
-                                    String GSM = separado[6];
-                                    String arregloGSM[] = GSM.split(": ");
-                                    String GSMsolonumero = arregloGSM[1];
-                                    int GSMinteger = Integer.parseInt(GSMsolonumero);
-                                    int resultadoGSMinteger = ((GSMinteger)*100)/32;
-                                    batteryTextView.setText(BatteryCiento);
-                                    signalTextView.setText("Signal: "+resultadoGSMinteger+"%");
-                                    powerTextView.setText(Encendido);
-                                }
-                            }
-                        });
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-
-                    }
+                if(browser.getUrl().contains("objects")){
+                    super.onPageFinished(view, url);
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        loading_button.setVisibility(View.GONE);
+                        browser.setVisibility(View.VISIBLE);
+                    }, 2000);
                 }
             }
-        };
-        t.start();
-
-
-
-
-
-    } //termina on Create
-
-    private void ToastServicio() {
+        });
+        WebSettings webSettings = browser.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        browser.loadUrl("https://www.gpswox.com/en/sign-in");
+        //Components Listeners
+        check_info_button.setOnClickListener(v -> checkMessage());
+        start_service.setOnClickListener(v -> is_service_running());
+        notifications_button.setOnClickListener(v -> openNotifications());
+        logout_button.setOnClickListener(v -> logoutMethod());
+        silence_button.setOnClickListener(v -> {
+            siren_player.stop(); //stops local media player siren sound
+            silence_service_ringing_siren(); //stops service siren sound
+            siren_player = MediaPlayer.create(MainActivity.this, R.raw.siren);
+            siren_player.setLooping(true);
+        });
+        set_engine_button.setOnClickListener(v -> {
+            if(set_engine_button.isChecked()){
+                set_engine_button.setChecked(false);
+                engine_on();
+            }else{
+                set_engine_button.setChecked(true);
+                engine_off();
+            }
+        });
+        set_arm_button.setOnClickListener(v -> {
+            if(set_arm_button.isChecked()){
+                set_arm_button.setChecked(false);
+                arm_on();
+            }else{
+                set_arm_button.setChecked(true);
+                arm_off();
+            }
+        });
+    }
+    // Create a custom WebViewClient to handle URL loading within the WebView.
+    private static class MyWebViewClient extends WebViewClient {
+//        .List<String> whiteHosts = Arrays.asList("http://europe.gpswox.com/objects",  "https://www.gpswox.com/en/sign-in");
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url); // Load the URL in the WebView, not in an external browser.
+            return true;
+        }
+    }
+    public void silence_service_ringing_siren(){
+        Intent myService = new Intent(this, Background_Service.class);
+        if(Background_Service.isRinging()){
+            stopService(myService);
+            stopService(myService);
+            stopService(myService);
+            Toast.makeText(this, "Cellphone Siren Off", Toast.LENGTH_LONG).show();
+            startForegroundService();
+        }else{
+            Toast.makeText(this, "There is no active siren!", Toast.LENGTH_LONG).show();
+        }
+    }
+    private void is_service_running() {
         if(Background_Service.isRunning()){
-            Toast.makeText(this, "Servicio previamente iniciado.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Service already running.", Toast.LENGTH_SHORT).show();
         }else{
             startForegroundService();
         }
 
     }
-
-
-    public static MainActivity getInstance(){
-        return   activityA;
-
-    }
-
-    public void checkSharedPreferences(){
-        String ValorArmSwitch = mPreferences.getString(getString(R.string.EstadoSwitchArm), "False");
-        String EstadoMotor = mPreferences.getString("estadoEngine", "True");
-
-        if(ValorArmSwitch.equals("False")){
-            botonqueseguarda.setChecked(false);
-        }else{
-            botonqueseguarda.setChecked(true);
-        }
-
-        if(EstadoMotor.equals("True")){
-            enginebutton.setChecked(true);
-        }else{
-            enginebutton.setChecked(false);
-        }
+    private void startForegroundService(){
+        Intent serviceIntent = new Intent(this, Background_Service.class);
+        serviceIntent.putExtra("inputExtra", "System is active.");
+        ContextCompat.startForegroundService(this, serviceIntent);
+        Toast.makeText(this, "Starting service...", Toast.LENGTH_SHORT).show();
     }
     private void logoutMethod(){
         FirebaseAuth.getInstance().signOut();
@@ -354,72 +324,14 @@ public class MainActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-
-
-
-
     private void checkMessage(){
         String phoneNumber = mPreferences.getString(getString(R.string.GPS_DEVICE_NUMBER), "");
-
 
         if(phoneNumber!=null&&!phoneNumber.isEmpty()){
             String Message = "check280697";
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phoneNumber, null, Message, null, null);
-            PendingIntent sentIntent = null, deliveryIntent = null;
-            Toast.makeText(this, "Actualizando datos de barra superior...", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, "GPS Device Number not configured.", Toast.LENGTH_SHORT).show();
-        }
-
-
-    }
-
-    private void startForegroundService(){
-        Intent serviceIntent = new Intent(this, Background_Service.class);
-        serviceIntent.putExtra("inputExtra", "El sistema se encuentra activo.");
-        ContextCompat.startForegroundService(this, serviceIntent);
-        Toast.makeText(this, "Iniciando servicio...", Toast.LENGTH_SHORT).show();
-    }
-    private void MensajeAuxilio(){
-        String miContactoSOS = mPreferences.getString(getString(R.string.SOS_ALERT_NUMBER), "");
-        if(miContactoSOS!=null&&!miContactoSOS.isEmpty()){
-            String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-            String UbicacionFinal = mPreferences.getString(getString(R.string.mensajeubicacion), "");
-            String Message = currentDateTimeString+"\n¡Auxilio!, estoy en "+UbicacionFinal;
-
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(miContactoSOS, null, Message, null, null);
-            Toast.makeText(this, "Mensaje de ayuda enviado exitosamente...", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, "GPS Device Number not configured.", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-    private void AskParkSpotMethod(){
-        ubicacion();
-        mEditor.putString(getString(R.string.ParkingSpotLocationWasAsked), "True");
-        mEditor.commit();
-
-        Toast.makeText(this, "Pidiendo ParkSpot Location...", Toast.LENGTH_SHORT).show();
-    }
-    private void sosCommand(){
-        String phoneNumber = mPreferences.getString(getString(R.string.GPS_DEVICE_NUMBER), "");
-        if(phoneNumber!=null&&!phoneNumber.isEmpty()){
-            ubicacion();
-            mEditor.putString(getString(R.string.SOSmessageStatus), "True");
-            mEditor.commit();
-            // Este comando pone el valor TRUE a la condicion Toast.makeText(this, "Mensaje de ayuda enviado...", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, "GPS Device Number not configured.", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-    private void logoutCommand(){
-        String phoneNumber = mPreferences.getString(getString(R.string.GPS_DEVICE_NUMBER), "");
-        if(phoneNumber!=null&&!phoneNumber.isEmpty()){
-            mEditor.putString(getString(R.string.AskParkLocationString), "True");
-            mEditor.commit();
+            Toast.makeText(this, "Updating...", Toast.LENGTH_LONG).show();
         }else{
             Toast.makeText(this, "GPS Device Number not configured.", Toast.LENGTH_SHORT).show();
         }
@@ -431,54 +343,9 @@ public class MainActivity extends AppCompatActivity {
         if(phoneNumber!=null&&!phoneNumber.isEmpty()){
             Intent intent = new Intent(this, notifications.class);
             startActivity(intent);
-// Estas se pueden borrar si ya no son necesarias           String getNewUserConfig = mPreferences.getString(getString(R.string.GPS_DEVICE_NUMBER), "");
-//            Toast.makeText(this, getNewUserConfig, Toast.LENGTH_SHORT).show();
-//            String getNewUserConfigSOS = mPreferences.getString(getString(R.string.SOS_ALERT_NUMBER), "");
-//            Toast.makeText(this, getNewUserConfigSOS, Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(this, "GPS Device Number not configured.", Toast.LENGTH_SHORT).show();
         }
-
-    }
-    private void openPagos(){
-        Intent intent = new Intent(this, pagos.class);
-        startActivity(intent);
-    }
-    public void openMaps (){
-        String UbicacionFinal = mPreferences.getString(getString(R.string.mensajeubicacion), "");
-        if(UbicacionFinal!=null&&!UbicacionFinal.isEmpty()){
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(UbicacionFinal));
-            startActivity(browserIntent);
-        }else{
-            Toast.makeText(this, "No hay datos, por favor presiona antes el boton obtener ubicación.", Toast.LENGTH_LONG).show();
-        }
-
-    }
-    public  void openWebBrowser(){
-
-        Intent intent = new Intent(this, com.example.rubiksgps.web_browser.class);
-        startActivity(intent);
-    }
-    public void ubicacion(){
-        String phoneNumber = mPreferences.getString(getString(R.string.GPS_DEVICE_NUMBER), "");
-        if(phoneNumber!=null&&!phoneNumber.isEmpty()){
-            String Message = "fix010s001n280697";
-            if (!phoneNumber.toString().equals("") || !txt_message.getText().toString().equals("")) {
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(phoneNumber, null, Message, null, null);
-
-                Toast.makeText(this, "Obteniendo ubicación...", Toast.LENGTH_SHORT).show();
-                count=0;
-
-
-            } else {
-                Toast.makeText(this, "Comando no enviado", Toast.LENGTH_SHORT).show();
-            }
-        }else{
-            Toast.makeText(this, "GPS Device Number not configured.", Toast.LENGTH_SHORT).show();
-        }
-
-
 
     }
     public void vibrate_alarm(){
@@ -493,54 +360,14 @@ public class MainActivity extends AppCompatActivity {
             v.vibrate(pattern, 0);
         }
 
-    }
-    public void arm_state() {
-        int permissionCheck = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS);
-        if (permissionCheck== PackageManager.PERMISSION_GRANTED) {
-            if (botonqueseguarda.isChecked()) {
-                arm_on();
-            }
-            else if(!botonqueseguarda.isChecked()) {
-                arm_off();
-            }
-        }
-        else{
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, 0) ;
-        }
-    }
-    public void engine_state(){
-        int permissionCheck = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS);
-        if (permissionCheck== PackageManager.PERMISSION_GRANTED) {
-            if (enginebutton.isChecked()) {
-                engine_on();
-            }
-            else if(!enginebutton.isChecked()) {
-                engine_off();
-            }
-        }
-        else{
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, 0) ;
-        }
-
-
-    }
+    } //Vibration alarm (no sound)
     private void arm_off() {
         String phoneNumber = mPreferences.getString(getString(R.string.GPS_DEVICE_NUMBER), "");
         if(phoneNumber!=null&&!phoneNumber.isEmpty()){
-            String Message = "disarm280697";
-
-            if (!phoneNumber.toString().equals("") || !txt_message.getText().toString().equals("")) {
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(phoneNumber, null, Message, null, null);
-                count=0;
-
-                Toast.makeText(this, "Desactivando sistema...", Toast.LENGTH_SHORT).show();
-
-
-
-            } else {
-                Toast.makeText(this, "Comando no enviado", Toast.LENGTH_SHORT).show();
-            }
+            String message = "disarm280697";
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+            Toast.makeText(this, "Deactivating system", Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(this, "GPS Device Number not configured.", Toast.LENGTH_SHORT).show();
         }
@@ -550,10 +377,10 @@ public class MainActivity extends AppCompatActivity {
     private void arm_on() {
         String phoneNumber = mPreferences.getString(getString(R.string.GPS_DEVICE_NUMBER), "");
         if(phoneNumber!=null&&!phoneNumber.isEmpty()){
-            String Message = "arm280697";
+            String message = "arm280697";
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, Message, null, null);
-            Toast.makeText(this, "Activando sistema...", Toast.LENGTH_SHORT).show();
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+            Toast.makeText(this, "Activating system", Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(this, "GPS Device Number not configured.", Toast.LENGTH_SHORT).show();
         }
@@ -563,10 +390,10 @@ public class MainActivity extends AppCompatActivity {
     private void engine_on(){
         String phoneNumber = mPreferences.getString(getString(R.string.GPS_DEVICE_NUMBER), "");
         if(phoneNumber!=null&&!phoneNumber.isEmpty()){
-            String Message = "resume280697";
+            String message = "resume280697";
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, Message, null, null);
-            Toast.makeText(this, "Encendiendo motor...", Toast.LENGTH_SHORT).show();
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+            Toast.makeText(this, "Turning On A1", Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(this, "GPS Device Number not configured.", Toast.LENGTH_SHORT).show();
         }
@@ -575,43 +402,15 @@ public class MainActivity extends AppCompatActivity {
     private void engine_off(){
         String phoneNumber = mPreferences.getString(getString(R.string.GPS_DEVICE_NUMBER), "");
         if(phoneNumber!=null&&!phoneNumber.isEmpty()){
-            String Message = "stop280697";
+            String message = "stop280697";
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, Message, null, null);
-            Toast.makeText(this, "Apagando motor...", Toast.LENGTH_SHORT).show();
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+            Toast.makeText(this, "Turning Off A1", Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(this, "GPS Device Number not configured.", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void silentmodebuttonclick(){
-
-        Intent myService = new Intent(this, Background_Service.class);
-
-        if(Background_Service.isRinging()){
-            stopService(myService);
-            stopService(myService);
-            stopService(myService);
-            Toast.makeText(this, "Se detuvo la alarma activa. ", Toast.LENGTH_LONG).show();
-            startForegroundService();
-
-
-        }else{
-            Toast.makeText(this, "No hay ninguna alarma activa. ", Toast.LENGTH_LONG).show();
-        }
-
-
-
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        if(requestCode==ALL_PERMISSIONS){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            }
-        }
-    }
 }
 
